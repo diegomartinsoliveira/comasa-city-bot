@@ -315,24 +315,24 @@ module.exports = grupo = async(client,message) => {
                 }
                 break
                 
-            case "!ibanir":
-                if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
-                if(args.length == 1) return client.reply(chatId, erroComandoMsg(command), id)
-                var qtdMensagem = args[1]
-                if(isNaN(qtdMensagem)) return client.reply(chatId, msgs_texto.grupo.binativos.erro_qtd , id)
-                if(qtdMensagem < 1 || qtdMensagem > 50) return client.reply(chatId, msgs_texto.grupo.binativos.limite_qtd , id)
-                var grupoInfo = await db.obterGrupo(groupId)
-                if(!grupoInfo.contador.status) return client.reply(chatId, msgs_texto.grupo.binativos.erro_contador , id)
-                var usuariosInativos = await db.obterUsuariosInativos(groupId, qtdMensagem)
-                if(usuariosInativos.length != 0){
-                    for(let usuario of usuariosInativos){
-                        if(usuario.id_usuario != botNumber+"@c.us") await client.removeParticipant(chatId,usuario.id_usuario)
-                    }
-                    client.reply(chatId,criarTexto(msgs_texto.grupo.binativos.sucesso, usuariosInativos.length - 1, qtdMensagem), id)
-                } else {
-                    client.reply(chatId,msgs_texto.grupo.binativos.sem_inativo,id)
-                }
-                break
+            // case "!ibanir":
+            //     if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
+            //     if(args.length == 1) return client.reply(chatId, erroComandoMsg(command), id)
+            //     var qtdMensagem = args[1]
+            //     if(isNaN(qtdMensagem)) return client.reply(chatId, msgs_texto.grupo.binativos.erro_qtd , id)
+            //     if(qtdMensagem < 1 || qtdMensagem > 50) return client.reply(chatId, msgs_texto.grupo.binativos.limite_qtd , id)
+            //     var grupoInfo = await db.obterGrupo(groupId)
+            //     if(!grupoInfo.contador.status) return client.reply(chatId, msgs_texto.grupo.binativos.erro_contador , id)
+            //     var usuariosInativos = await db.obterUsuariosInativos(groupId, qtdMensagem)
+            //     if(usuariosInativos.length != 0){
+            //         for(let usuario of usuariosInativos){
+            //             if(usuario.id_usuario != botNumber+"@c.us") await client.removeParticipant(chatId,usuario.id_usuario)
+            //         }
+            //         client.reply(chatId,criarTexto(msgs_texto.grupo.binativos.sucesso, usuariosInativos.length - 1, qtdMensagem), id)
+            //     } else {
+            //         client.reply(chatId,msgs_texto.grupo.binativos.sem_inativo,id)
+            //     }
+            //     break
 
             case "!topativos":
                 if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
@@ -557,16 +557,16 @@ module.exports = grupo = async(client,message) => {
                 await client.sendTextWithMentions(chatId, respostaMarcar)
                 break  
 
-            case '!bantodos':
-                var donoGrupo = sender.id === chat.groupMetadata.owner
-                if (!donoGrupo) return client.reply(chatId, msgs_texto.permissao.apenas_dono_grupo, id)           
-                if (!isBotGroupAdmins) return client.reply(chatId, msgs_texto.permissao.bot_admin, id)
-                var membrosGrupo = await client.getGroupMembers(groupId)
-                for(let membro of membrosGrupo){
-                    if (!groupAdmins.includes(membro.id)) await client.removeParticipant(groupId, membro.id)
-                }
-                client.reply(chatId, msgs_texto.grupo.banirtodos.banir_sucesso, id)
-                break  
+            // case '!bantodos':
+            //     var donoGrupo = sender.id === chat.groupMetadata.owner
+            //     if (!donoGrupo) return client.reply(chatId, msgs_texto.permissao.apenas_dono_grupo, id)           
+            //     if (!isBotGroupAdmins) return client.reply(chatId, msgs_texto.permissao.bot_admin, id)
+            //     var membrosGrupo = await client.getGroupMembers(groupId)
+            //     for(let membro of membrosGrupo){
+            //         if (!groupAdmins.includes(membro.id)) await client.removeParticipant(groupId, membro.id)
+            //     }
+            //     client.reply(chatId, msgs_texto.grupo.banirtodos.banir_sucesso, id)
+            //     break  
             
             case '!add':
                 if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin, id)
@@ -600,30 +600,30 @@ module.exports = grupo = async(client,message) => {
                 }
                 break
 
-            case '!ban':
-                if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin, id)
-                if (!isBotGroupAdmins) return client.reply(chatId, msgs_texto.permissao.bot_admin, id)
-                var usuariosSelecionados = []
-                if(mentionedJidList.length === 0 && quotedMsg) usuariosSelecionados.push(quotedMsgObj.author)
-                else if(mentionedJidList.length > 0) usuariosSelecionados = mentionedJidList
-                else return client.reply(chatId, erroComandoMsg(command), id)
-                var idParticipantesAtuais = await client.getGroupMembersId(groupId)
-                for(let usuario of usuariosSelecionados){
-                    if(idParticipantesAtuais.includes(usuario)){
-                        if(!groupAdmins.includes(usuario)){
-                            client.removeParticipant(groupId, usuario).then(()=>{
-                                if(usuariosSelecionados.length === 1) {
-                                    client.sendTextWithMentions(chatId, criarTexto(msgs_texto.geral.resposta_ban, usuario.replace("@c.us", ""), msgs_texto.grupo.banir.motivo, username))
-                                }
-                            })
-                        } else {
-                            if(usuariosSelecionados.length === 1) client.reply(chatId, msgs_texto.grupo.banir.banir_admin, id)
-                        }
-                    } else {
-                        if(usuariosSelecionados.length === 1) client.reply(chatId,  msgs_texto.grupo.banir.banir_erro, id)
-                    }
-                }     
-                break
+            // case '!ban':
+            //     if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin, id)
+            //     if (!isBotGroupAdmins) return client.reply(chatId, msgs_texto.permissao.bot_admin, id)
+            //     var usuariosSelecionados = []
+            //     if(mentionedJidList.length === 0 && quotedMsg) usuariosSelecionados.push(quotedMsgObj.author)
+            //     else if(mentionedJidList.length > 0) usuariosSelecionados = mentionedJidList
+            //     else return client.reply(chatId, erroComandoMsg(command), id)
+            //     var idParticipantesAtuais = await client.getGroupMembersId(groupId)
+            //     for(let usuario of usuariosSelecionados){
+            //         if(idParticipantesAtuais.includes(usuario)){
+            //             if(!groupAdmins.includes(usuario)){
+            //                 client.removeParticipant(groupId, usuario).then(()=>{
+            //                     if(usuariosSelecionados.length === 1) {
+            //                         client.sendTextWithMentions(chatId, criarTexto(msgs_texto.geral.resposta_ban, usuario.replace("@c.us", ""), msgs_texto.grupo.banir.motivo, username))
+            //                     }
+            //                 })
+            //             } else {
+            //                 if(usuariosSelecionados.length === 1) client.reply(chatId, msgs_texto.grupo.banir.banir_admin, id)
+            //             }
+            //         } else {
+            //             if(usuariosSelecionados.length === 1) client.reply(chatId,  msgs_texto.grupo.banir.banir_erro, id)
+            //         }
+            //     }     
+            //     break
 
             case '!promover':
                 if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin, id)

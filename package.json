@@ -1,5 +1,5 @@
 {
-  "name": "lbot-whatsapp",
+  "name": "diwabot-whatsapp",
   "version": "1.17.9",
   "description": "Bot brasileiro para Whatsapp com diversas utilidades para o dia-a-dia.",
   "main": "app",
@@ -7,7 +7,7 @@
     "start": "node app.js",
     "test": "node test.js"
   },
-  "author": "Leal",
+  "author": "Diego",
   "license": "Apache-2.0",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
@@ -39,7 +39,7 @@
     "tiktok-scraper": "^1.4.36",
     "twitter-url-direct": "^1.0.2",
     "youtube-sr": "^4.2.0",
-    "ytdl-core": "4.10.0"
+    "ytdl-core": "^4.11.5"
   },
   "directories": {
     "lib": "lib"

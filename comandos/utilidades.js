@@ -5,6 +5,7 @@ const msgs_texto = require('../lib/msgs')
 const {criarTexto, erroComandoMsg, obterNomeAleatorio, removerNegritoComando} = require("../lib/util")
 const path = require('path')
 const api = require("../lib/api")
+const menu = require('../lib/menu')
 const {converterMp4ParaMp3} = require("../lib/conversao")
 
 module.exports = utilidades = async(client,message) => {
@@ -266,6 +267,285 @@ module.exports = utilidades = async(client,message) => {
                 } catch(err){
                     client.reply(chatId, err.message, id)
                 }
+                break
+            
+                case "!regrasgrupo":
+                    try{
+                        var respostaFrase = await menu.regrasGrupo()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+                
+                case "!linkg1":
+                    try{
+                        var respostaFrase = await menu.linkg1()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!linkg2":
+                    try{
+                        var respostaFrase = await menu.linkg2()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!grupoaluguel":
+                    try{
+                        var respostaFrase = await menu.grupoaluguel()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!grupoempregos":
+                    try{
+                        var respostaFrase = await menu.grupoempregos()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!linktelegram":
+                    try{
+                        var respostaFrase = await menu.linktelegram()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!linkredes":
+                    try{
+                        var respostaFrase = await menu.linkredes()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!ubsfcomasa":
+                    try{
+                        var respostaFrase = await menu.ubsfcomasa()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!ubsfvila":
+                    try{
+                        var respostaFrase = await menu.ubsfvila()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!crascomasa":
+                    try{
+                        var respostaFrase = await menu.crascomasa()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!telefonesuteis":
+                    try{
+                        var respostaFrase = await menu.telefonesuteis()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!telefonesemergencias":
+                    try{
+                        var respostaFrase = await menu.telefonesemergencias()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!subprefeitura":
+                    try{
+                        var respostaFrase = await menu.subprefeitura()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!segundaviacelesc":
+                    try{
+                        var respostaFrase = await menu.segundaviacelesc()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!segundaviaaguas":
+                    try{
+                        var respostaFrase = await menu.segundaviaaguas()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!segundaviarg":
+                    try{
+                        var respostaFrase = await menu.segundaviarg()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!joinvillefacil":
+                    try{
+                        var respostaFrase = await menu.joinvillefacil()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!receitafederal":
+                    try{
+                        var respostaFrase = await menu.receitafederal()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!consultarcpf":
+                    try{
+                        var respostaFrase = await menu.consultarcpf()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!denunciardengue":
+                    try{
+                        var respostaFrase = await menu.denunciardengue()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!desativardownload":
+                    try{
+                        var respostaFrase = await menu.desativardownload()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!legendabombeiros":
+                    try{
+                        var respostaFrase = await menu.legendabombeiros()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!patrolamento":
+                    try{
+                        var respostaFrase = await menu.patrolamento()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!bocadelobo":
+                    try{
+                        var respostaFrase = await menu.bocadelobo()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!posteluzqueimada":
+                    try{
+                        var respostaFrase = await menu.posteluzqueimada()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!placadanificada":
+                    try{
+                        var respostaFrase = await menu.placadanificada()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!valoresareceber":
+                    try{
+                        var respostaFrase = await menu.valoresareceber()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!agendarconsulta":
+                    try{
+                        var respostaFrase = await menu.agendarconsulta()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!infobrs":
+                    try{
+                        var respostaFrase = await menu.infobrs()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!infobombeiros":
+                    try{
+                        var respostaFrase = await menu.infobombeiros()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!grupofacebook":
+                    try{
+                        var respostaFrase = await menu.grupofacebook()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
                 break
         }
     } catch(err){

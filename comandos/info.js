@@ -81,10 +81,10 @@ module.exports = info = async(client, message, abrirMenu) => {
                             menuResposta = menu.menuInfoSuporte()
                             break
                         case "1":
-                            menuResposta = menu.menuFigurinhas()
+                            menuResposta = menu.menuUtilidades()
                             break
                         case "2":
-                            menuResposta = menu.menuUtilidades()
+                            menuResposta = menu.menuFigurinhas()
                             break
                         case "3":
                             menuResposta = menu.menuDownload()
