@@ -143,7 +143,7 @@ module.exports = grupo = async(client,message) => {
                 for(let usuario_lista of lista_negra_grupo){
                     resposta_listanegra += criarTexto(msgs_texto.grupo.listanegra.resposta_itens, usuario_lista.replace(/@c.us/g, ''))
                 }
-                resposta_listanegra += `╚═〘 ${process.env.NOME_BOT.trim()}®〙`
+                resposta_listanegra += `╚═〘 ${process.env.NOME_BOT.trim()} ®〙`
                 await client.sendTextWithMentions(chatId, resposta_listanegra)
                 break
 
@@ -308,7 +308,7 @@ module.exports = grupo = async(client,message) => {
                     for(let usuario of usuariosInativos){
                         if(usuario.id_usuario != botNumber+"@c.us") inativosResposta += criarTexto(msgs_texto.grupo.minativos.resposta_itens, usuario.id_usuario.replace(/@c.us/g, ''), usuario.msg)
                     }
-                    inativosResposta += `╚═〘 ${process.env.NOME_BOT.trim()}® 〙`
+                    inativosResposta += `╚═〘 ${process.env.NOME_BOT.trim()} ® 〙`
                     client.sendTextWithMentions(chatId, inativosResposta)
                 } else {
                     client.reply(chatId,msgs_texto.grupo.minativos.sem_inativo,id)
@@ -361,7 +361,7 @@ module.exports = grupo = async(client,message) => {
                     }
                     respostaTop += criarTexto(msgs_texto.grupo.topativos.resposta_itens, medalha, i+1, usuariosAtivos[i].id_usuario.replace(/@c.us/g, ''), usuariosAtivos[i].msg)   
                 }
-                respostaTop += `╠\n╚═〘 ${process.env.NOME_BOT.trim()}® 〙`
+                respostaTop += `╠\n╚═〘 ${process.env.NOME_BOT.trim()} ® 〙`
                 await client.sendTextWithMentions(chatId, respostaTop)
                 break
             
@@ -537,7 +537,7 @@ module.exports = grupo = async(client,message) => {
                 for(let membro of membrosGrupo){
                     respostaMarcar += criarTexto(msgs_texto.grupo.mt.resposta_itens, membro.id.split("@")[0])
                 }
-                respostaMarcar += `╚═〘 ${process.env.NOME_BOT.trim()}®〙`
+                respostaMarcar += `╚═〘 ${process.env.NOME_BOT.trim()} ®〙`
                 await client.sendTextWithMentions(chatId, respostaMarcar)
                 break
                 
@@ -552,7 +552,7 @@ module.exports = grupo = async(client,message) => {
                         membrosMarcados.push(membro)
                     }
                 }
-                respostaMarcar += `╚═〘 ${process.env.NOME_BOT.trim()}®〙`
+                respostaMarcar += `╚═〘 ${process.env.NOME_BOT.trim()} ®〙`
                 if(membrosMarcados.length == 0) return client.reply(chatId, msgs_texto.grupo.mm.sem_membros, id)
                 await client.sendTextWithMentions(chatId, respostaMarcar)
                 break  

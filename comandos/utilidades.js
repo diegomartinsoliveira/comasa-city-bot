@@ -404,6 +404,24 @@ module.exports = utilidades = async(client,message) => {
                     }
                 break
 
+                case "!segundaviacpf":
+                    try{
+                        var respostaFrase = await menu.segundaviacpf()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!segundaviacpfcrianca":
+                    try{
+                        var respostaFrase = await menu.segundaviacpfcrianca()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
                 case "!segundaviarg":
                     try{
                         var respostaFrase = await menu.segundaviarg()
