@@ -64,6 +64,13 @@ const start = async (client = new Client()) => {
                 await chamadaComando(client, message)
             }), {})
 
+            client.onMessage(async message => {
+                if (message.isGroupMsg === false) { // Verifica se a mensagem é de um chat privado
+                    const msgBoasVindas = "Olá! Sou o robô virtual do grupo Comasa City. Se precisa de alguma informação digite: *!menu* com exclamação na frente mesmo.";
+                    await client.reply(message.chatId, msgBoasVindas, message.id); // Envia a mensagem de boas-vindas
+                }
+            });
+
             //Ouvindo entrada/saida de participantes dos grupo
             client.onGlobalParticipantsChanged((async (ev) => {
                 await eventosGrupo(client, ev)
