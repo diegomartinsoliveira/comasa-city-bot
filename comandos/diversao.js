@@ -151,6 +151,19 @@ module.exports = diversao = async(client,message) => {
                 await client.reply(chatId, msgs_texto.diversao.viado.espera , id)
                 await client.sendTextWithMentions(chatId, respostaTexto)
             break
+
+            case '!sortear':
+                if (!isGroupMsg) return await client.reply(chatId, msgs_texto.permissao.grupo, id)
+                if (!isBotGroupAdmins) return await client.reply(chatId,msgs_texto.permissao.bot_admin, id)
+                var idParticipantesAtuais = await client.getGroupMembersId(groupId)
+                idParticipantesAtuais.splice(idParticipantesAtuais.indexOf(groupOwner),1)
+                idParticipantesAtuais.splice(idParticipantesAtuais.indexOf(botNumber+'@c.us'),1)
+                if(idParticipantesAtuais.length == 0) return await client.reply(chatId, msgs_texto.diversao.roletarussa.sem_membros, id)
+                var indexAleatorio = Math.floor(Math.random() * idParticipantesAtuais.length)
+                var respostaTexto = criarTexto(msgs_texto.diversao.sortear.resposta, idParticipantesAtuais[indexAleatorio].replace(/@c.us/g, ''))
+                await client.reply(chatId, msgs_texto.diversao.sortear.espera , id)
+                await client.sendTextWithMentions(chatId, respostaTexto)
+            break
             
             case '!casal':
                 if (!isGroupMsg) return await client.reply(chatId, msgs_texto.permissao.grupo, id)
