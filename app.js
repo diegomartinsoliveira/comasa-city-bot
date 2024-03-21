@@ -13,6 +13,7 @@ const msgs_texto = require("./lib/msgs")
 const recarregarContagem = require("./lib/recarregarContagem")
 const {botStart} = require('./lib/bot')
 const {verificarEnv} = require('./lib/env')
+const chatsQueReceberamBoasVindas = new Map();
 
 
 const start = async (client = new Client()) => {
@@ -26,10 +27,6 @@ const start = async (client = new Client()) => {
             },5000)
         } else {
             const eventosGrupo = require('./lib/eventosGrupo')
-            const antiLink = require('./lib/antiLink')
-            const antiFlood = require('./lib/antiFlood')
-            const antiTrava = require('./lib/antiTrava')
-            const antiPorno = require('./lib/antiPorno')
             const cadastrarGrupo = require('./lib/cadastrarGrupo')
 
             //Cadastro de grupos
@@ -56,18 +53,20 @@ const start = async (client = new Client()) => {
 
             // Ouvindo mensagens
             client.onMessage((async (message) => {
-                if(!await antiTrava(client,message)) return
-                if(!await antiLink(client,message)) return
-                if(!await antiFlood(client,message)) return
-                if(!await antiPorno(client, message)) return
                 if(!await checagemMensagem(client, message)) return
                 await chamadaComando(client, message)
             }), {})
 
             client.onMessage(async message => {
                 if (message.isGroupMsg === false) { // Verifica se a mensagem é de um chat privado
-                    const msgBoasVindas = "Olá! Sou o robô virtual do grupo Comasa City. Se precisa de alguma informação digite: *!menu* com exclamação na frente mesmo.";
-                    await client.reply(message.chatId, msgBoasVindas, message.id); // Envia a mensagem de boas-vindas
+                    const chatId = message.chatId;
+                    // Verifica se a mensagem de boas-vindas já foi enviada para este chat
+                    if (!chatsQueReceberamBoasVindas.has(chatId)) {
+                        const msgBoasVindas = "Olá! Sou o robô virtual do grupo Comasa City, caso precise de alguma informação digite: *!menu* com exclamação na frente mesmo.";
+                        await client.reply(chatId, msgBoasVindas, message.id); // Envia a mensagem de boas-vindas
+                        // Registra que a mensagem de boas-vindas foi enviada para este chat
+                        chatsQueReceberamBoasVindas.set(chatId, true);
+                    }
                 }
             });
 

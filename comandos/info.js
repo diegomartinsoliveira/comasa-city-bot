@@ -87,16 +87,13 @@ module.exports = info = async(client, message, abrirMenu) => {
                             menuResposta = menu.menuFigurinhas()
                             break
                         case "3":
-                            menuResposta = menu.menuDownload()
-                            break
-                        case "4":
                             if(isGroupMsg) menuResposta = menu.menuGrupo(isGroupAdmins)
                             else return await client.reply(chatId, msgs_texto.permissao.grupo, id)
                             break
-                        case "5":
+                        case "4":
                             menuResposta = menu.menuDiversao(isGroupMsg)
                             break
-                        case "6":
+                        case "5":
                             menuResposta = menu.menuCreditos()
                             break
                     }

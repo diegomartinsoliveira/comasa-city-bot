@@ -6,7 +6,6 @@ const {criarTexto, erroComandoMsg, obterNomeAleatorio, removerNegritoComando} = 
 const path = require('path')
 const api = require("../lib/api")
 const menu = require('../lib/menu')
-const {converterMp4ParaMp3} = require("../lib/conversao")
 
 module.exports = utilidades = async(client,message) => {
     try{
@@ -76,36 +75,6 @@ module.exports = utilidades = async(client,message) => {
                 }
                 break
 
-            case "!qualmusica":
-                var dadosMensagem = quotedMsg ? quotedMsg : message
-                if(dadosMensagem.mimetype != "video/mp4" && dadosMensagem.type != "audio" && dadosMensagem.type != "ptt") return client.reply(chatId, erroComandoMsg(command), id)
-                var caminhoAudio = null, caminhoVideo = null
-                var mediaData = await decryptMedia(dadosMensagem, uaOverride)
-                await client.reply(chatId, msgs_texto.utilidades.qualmusica.espera, id)
-                if(dadosMensagem.mimetype == "video/mp4"){
-                    caminhoVideo = path.resolve(`media/videos/${obterNomeAleatorio(".mp4")}`)
-                    fs.writeFileSync(caminhoVideo, mediaData, "base64")
-                    try{
-                        caminhoAudio = await converterMp4ParaMp3(caminhoVideo)
-                        fs.unlinkSync(caminhoVideo)
-                    }catch(err){
-                        fs.unlinkSync(caminhoVideo)
-                        client.reply(chatId, msgs_texto.utilidades.qualmusica.erro_conversao, id)
-                    }
-                }
-                if(dadosMensagem.type == "audio" || dadosMensagem.type == "ptt"){
-                    caminhoAudio = path.resolve(`media/audios/${obterNomeAleatorio(".mp3")}`)
-                    fs.writeFileSync(caminhoAudio, mediaData, "base64");
-                }
-                try{
-                    var resp = await api.obterReconhecimentoMusica(caminhoAudio)
-                    fs.unlinkSync(caminhoAudio)
-                    client.reply(chatId, criarTexto(msgs_texto.utilidades.qualmusica.resposta, resp.titulo, resp.produtora, resp.duracao, resp.lancamento, resp.album, resp.artistas), id)
-                }catch(err){
-                    client.reply(chatId, err.message, id)
-                }
-                break
-
             case "!clima":
                 if(args.length === 1) return client.reply(chatId, erroComandoMsg(command),id)
                 try{
@@ -158,47 +127,6 @@ module.exports = utilidades = async(client,message) => {
                     await client.reply(chatId, rastreioResposta, id)
                 } catch(err){
                     await client.reply(chatId, err.message ,id)
-                }
-                break
-            
-            case "!anime":
-                if(isMedia || quotedMsg){
-                    var dadosMensagem = {
-                        tipo: (isMedia)? type : quotedMsg.type,
-                        mimetype: (isMedia)? mimetype : quotedMsg.mimetype,
-                        mensagem: (isMedia)? message : quotedMsg
-                    }
-                    if(dadosMensagem.tipo === "image"){
-                        client.reply(chatId,msgs_texto.utilidades.anime.espera, id)
-                        var mediaData = await decryptMedia(dadosMensagem.mensagem, uaOverride)
-                        var usuarioImgBase64 = `data:${dadosMensagem.mimetype};base64,${mediaData.toString('base64')}`
-                        try{
-                            var animeInfo = await api.obterAnimeInfo(usuarioImgBase64)
-                            if(animeInfo.similaridade < 87) return client.reply(chatId,msgs_texto.utilidades.anime.similaridade,id)
-                            animeInfo.episodio = animeInfo.episodio || "---"
-                            var respostaAnimeInfo = criarTexto(msgs_texto.utilidades.anime.resposta, animeInfo.titulo, animeInfo.episodio, animeInfo.tempoInicial, animeInfo.tempoFinal, animeInfo.similaridade, animeInfo.link_previa)
-                            await client.reply(chatId, respostaAnimeInfo, id)
-                        } catch(err){
-                            client.reply(chatId,err.message,id)
-                        }
-                    } else {
-                        client.reply(chatId,erroComandoMsg(command), id)
-                    }
-                } else {
-                    client.reply(chatId,erroComandoMsg(command), id)
-                }
-                break
-
-            case "!animelanc":
-                try{
-                    var resultadosAnimes = await api.obterAnimesLancamentos()
-                    var respostaLancamentos = msgs_texto.utilidades.animelanc.resposta_titulo
-                    for(let anime of resultadosAnimes){
-                        respostaLancamentos += criarTexto(msgs_texto.utilidades.animelanc.resposta_itens, anime.titulo, anime.episodio, anime.url)
-                    }
-                    client.reply(chatId, respostaLancamentos, id)
-                } catch(err){
-                    client.reply(chatId, err.message, id)
                 }
                 break
             
