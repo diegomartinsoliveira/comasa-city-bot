@@ -16,22 +16,7 @@ module.exports = utilidades = async(client,message) => {
         const args =  commands.split(' ')
         const uaOverride = 'WhatsApp/2.2029.4 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 
-        switch(command){      
-            case "!tabela":
-                var tabela = await api.obterTabelaNick()
-                await client.reply(chatId, criarTexto(msgs_texto.utilidades.tabela.resposta, tabela), id)
-                break
-
-            case "!letra":
-                if(args.length === 1) return client.reply(chatId, erroComandoMsg(command), id)
-                try{
-                    var usuarioTexto = body.slice(7).trim(), dadosMusica = await api.obterLetraMusica(usuarioTexto)
-                    await client.sendImage(chatId, dadosMusica.imagem, "artista.jpg", criarTexto(msgs_texto.utilidades.letra.resposta, dadosMusica.titulo, dadosMusica.artista, dadosMusica.letra), id)
-                } catch(err){
-                    await client.reply(chatId, err.message, id)
-                }
-                break
-                
+        switch(command){                      
             case "!ddd":
                 var DDD = null
                 if(quotedMsg){

@@ -31,41 +31,6 @@ module.exports = grupo = async(client,message) => {
                     client.sendText(chatId, grupoDescricao)
                 }
                 break
-            
-            case '!status':
-                if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
-                var grupoInfo = await db.obterGrupo(groupId)
-                var resposta = msgs_texto.grupo.status.resposta_titulo
-                //Bem-vindo
-                resposta += (grupoInfo.bemvindo.status) ? msgs_texto.grupo.status.resposta_variavel.bemvindo.on : msgs_texto.grupo.status.resposta_variavel.bemvindo.off
-                //Mutar
-                resposta += (grupoInfo.mutar) ? msgs_texto.grupo.status.resposta_variavel.mutar.on : msgs_texto.grupo.status.resposta_variavel.mutar.off
-                //Auto-Sticker
-                resposta += (grupoInfo.autosticker) ? msgs_texto.grupo.status.resposta_variavel.autosticker.on : msgs_texto.grupo.status.resposta_variavel.autosticker.off
-                //Anti-Pornô
-                resposta += (grupoInfo.antiporno) ? msgs_texto.grupo.status.resposta_variavel.antiporno.on : msgs_texto.grupo.status.resposta_variavel.antiporno.off
-                //Anti-Trava
-                resposta += (grupoInfo.antitrava.status) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.antitrava.on, grupoInfo.antitrava.max_caracteres) : msgs_texto.grupo.status.resposta_variavel.antitrava.off
-                //Anti-Link
-                let al_filtros = ""
-                if(grupoInfo.antilink.filtros.youtube) al_filtros += msgs_texto.grupo.status.resposta_variavel.antilink.filtros.youtube
-                if(grupoInfo.antilink.filtros.whatsapp) al_filtros += msgs_texto.grupo.status.resposta_variavel.antilink.filtros.whatsapp
-                if(grupoInfo.antilink.filtros.facebook) al_filtros += msgs_texto.grupo.status.resposta_variavel.antilink.filtros.facebook
-                if(grupoInfo.antilink.filtros.twitter) al_filtros += msgs_texto.grupo.status.resposta_variavel.antilink.filtros.twitter
-                resposta += (grupoInfo.antilink.status) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.antilink.on, al_filtros) : msgs_texto.grupo.status.resposta_variavel.antilink.off
-                //Anti-fake
-                resposta += (grupoInfo.antifake.status) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.antifake.on, grupoInfo.antifake.ddi_liberados.toString()) : msgs_texto.grupo.status.resposta_variavel.antifake.off
-                //Anti-flood
-                let infoAntiFlood = db.grupoInfoAntiFlood(groupId)
-                resposta += (grupoInfo.antiflood) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.antiflood.on, infoAntiFlood.max, infoAntiFlood.intervalo) : msgs_texto.grupo.status.resposta_variavel.antiflood.off 
-                //Contador
-                resposta += (grupoInfo.contador.status) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.contador.on, grupoInfo.contador.inicio) : msgs_texto.grupo.status.resposta_variavel.contador.off
-                //Bloqueio de CMDS
-                resposta += (grupoInfo.block_cmds.length != 0) ? criarTexto(msgs_texto.grupo.status.resposta_variavel.bloqueiocmds.on, grupoInfo.block_cmds.toString()) : msgs_texto.grupo.status.resposta_variavel.bloqueiocmds.off
-                //Lista Negra
-                resposta += criarTexto(msgs_texto.grupo.status.resposta_variavel.listanegra, grupoInfo.lista_negra.length)
-                client.sendText(chatId, resposta)
-                break
 
             case '!bv':
                 if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
@@ -135,21 +100,6 @@ module.exports = grupo = async(client,message) => {
                 if (!isBotGroupAdmins) return client.reply(chatId,msgs_texto.permissao.bot_admin, id)
                 client.revokeGroupInviteLink(groupId).then(()=>{client.reply(chatId, msgs_texto.grupo.rlink.sucesso ,id)}).catch(()=>{client.reply(chatId, msgs_texto.grupo.rlink.erro ,id)})
                 break        
-
-            case '!afake':
-                if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
-                if (!isBotGroupAdmins) return client.reply(chatId,msgs_texto.permissao.bot_admin, id)
-                var grupoInfo = await db.obterGrupo(groupId)
-                var estadoNovo = !grupoInfo.antifake.status
-                if (estadoNovo) {
-                    var DDIAutorizados = (body.slice(7).length == 0) ? ["55"] : body.slice(7).split(" ")
-                    await db.alterarAntiFake(groupId, true, DDIAutorizados)
-                    client.reply(chatId,  msgs_texto.grupo.antifake.ligado, id)
-                } else {
-                    await db.alterarAntiFake(groupId, false)
-                    client.reply(chatId,  msgs_texto.grupo.antifake.desligado, id)
-                } 
-                break
 
             case '!contador':
                 if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
