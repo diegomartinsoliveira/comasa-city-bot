@@ -42,8 +42,6 @@ module.exports = admin = async(client,message) => {
                 resposta += (infoBot.autosticker) ? msgs_texto.admin.infocompleta.resposta_variavel.autosticker.on: msgs_texto.admin.infocompleta.resposta_variavel.autosticker.off
                 // PV LIBERADO
                 resposta += (infoBot.pvliberado) ? msgs_texto.admin.infocompleta.resposta_variavel.pvliberado.on: msgs_texto.admin.infocompleta.resposta_variavel.pvliberado.off
-                // ANTI-TRAVA
-                resposta += (infoBot.antitrava.status) ? criarTexto(msgs_texto.admin.infocompleta.resposta_variavel.antitrava.on,  infoBot.antitrava.max_caracteres) : msgs_texto.admin.infocompleta.resposta_variavel.antitrava.off
                 // LIMITE COMANDOS DIARIO
                 resposta += (infoBot.limite_diario.status) ? criarTexto(msgs_texto.admin.infocompleta.resposta_variavel.limite_diario.on,  expiracaoLimiteDiario) : msgs_texto.admin.infocompleta.resposta_variavel.limite_diario.off
                 // LIMITE COMANDOS POR MINUTO
@@ -55,43 +53,6 @@ module.exports = admin = async(client,message) => {
                 resposta += criarTexto(msgs_texto.admin.infocompleta.resposta_inferior, blockNumber.length, infoBot.cmds_executados, ownerNumber)
                 if(fotoBot && fotoBot != "ERROR: 404") await client.sendFileFromUrl(chatId, fotoBot, "foto.jpg", resposta, id)
                 else await client.reply(chatId, resposta, id)
-                break
-                
-            case '!entrargrupo':
-                if (args.length < 2) return await client.reply(chatId, erroComandoMsg(command), id)
-                var linkGrupo = args[1]
-                var totalGrupos = await client.getAllGroups()
-                var linkValido = linkGrupo.match(/(https:\/\/chat.whatsapp.com)/gi)
-                var conviteInfo = await client.inviteInfo(linkGrupo)
-                if (!linkValido) return await client.reply(chatId, msgs_texto.admin.entrar_grupo.link_invalido, id)
-                if (totalGrupos.length > 10) return await client.reply(chatId, msgs_texto.admin.entrar_grupo.maximo_grupos, id)
-                if (conviteInfo.status === 200) {
-                    client.joinGroupViaLink(linkGrupo).then(async (gId) => {
-                        await cadastrarGrupo(gId, "added", client)
-                        await client.reply(chatId, msgs_texto.admin.entrar_grupo.entrar_sucesso,id)
-                    })
-                }
-                else {
-                    await client.reply(chatId, msgs_texto.admin.entrar_grupo.link_invalido, id)
-                }
-                break
-
-            case '!sair':
-                if (!isGroupMsg) return await client.reply(chatId, msgs_texto.permissao.grupo, id)
-                await client.sendText(chatId, msgs_texto.admin.sair.sair_sucesso)
-                await client.leaveGroup(groupId)
-                break
-
-            case '!listablock':
-                var resposta = criarTexto(msgs_texto.admin.listablock.resposta_titulo, blockNumber.length)
-                for (let i of blockNumber) resposta += criarTexto(msgs_texto.admin.listablock.resposta_itens, i.replace(/@c.us/g,''))
-                await client.sendTextWithMentions(chatId, resposta, id)
-                break
-
-            case '!limpartudo':
-                var chats = await client.getAllChats()
-                for (var c of chats) await client.deleteChat(c.id)
-                await client.sendText(ownerNumber+"@c.us", msgs_texto.admin.limpar.limpar_sucesso)
                 break
             
             case "!bcmdglobal":
@@ -105,75 +66,10 @@ module.exports = admin = async(client,message) => {
                 var usuarioComandos = body.slice(12).split(" "), respostaDesbloqueio = await desbloquearComandosGlobal(usuarioComandos)
                 await client.reply(chatId, respostaDesbloqueio, id)
                 break
-
-            case '!limpar':
-                var chats = await client.getAllChats()
-                for (var c of chats) {
-                    if(c.id.match(/@c.us/g) && c.id != sender.id) await client.deleteChat(c.id)
-                }
-                await client.sendText(ownerNumber+"@c.us", msgs_texto.admin.limpar.limpar_sucesso)
-                break
                 
             case '!rconfig':
                 await db.resetarGrupos()
                 await client.reply(chatId,msgs_texto.admin.rconfig.reset_sucesso,id)
-                break
-
-            case '!sairgrupos':
-                var grupos = await client.getAllGroups()
-                for (var grupo of grupos) await client.leaveGroup(grupo.contact.id)
-                var resposta = criarTexto(msgs_texto.admin.sairtodos.resposta, grupos.length)
-                await client.sendText(ownerNumber+"@c.us", resposta, id)
-                break
-
-            case "!bloquear":
-                var usuariosBloqueados = []
-                if(quotedMsg){
-                    usuariosBloqueados.push(quotedMsgObj.author)
-                } else if(mentionedJidList.length > 1) {
-                    usuariosBloqueados = mentionedJidList
-                } else {
-                    var numeroInserido = body.slice(10).trim()
-                    if(numeroInserido.length == 0) return await client.reply(chatId, erroComandoMsg(command), id)
-                    usuariosBloqueados.push(numeroInserido.replace(/\W+/g,"")+"@c.us")
-                }
-                for (var usuario of usuariosBloqueados){
-                    if(await client.getContact(usuario)){
-                        if(ownerNumber == usuario.replace(/@c.us/g, '')){
-                            await client.sendTextWithMentions(chatId, criarTexto(msgs_texto.admin.bloquear.erro_dono, usuario.replace(/@c.us/g, '')))
-                        } else {
-                            if(blockNumber.includes(usuario)) {
-                                await client.sendTextWithMentions(chatId, criarTexto(msgs_texto.admin.bloquear.ja_bloqueado, usuario.replace(/@c.us/g, '')))
-                            } else {
-                                client.contactBlock(usuario)
-                                await client.sendTextWithMentions(chatId, criarTexto(msgs_texto.admin.bloquear.sucesso, usuario.replace(/@c.us/g, '')))
-                            }
-                        }
-                    } else {
-                        await client.reply(chatId, criarTexto(msgs_texto.admin.bloquear.erro, usuario.replace("@c.us","")), id)
-                    }
-                }
-                break      
-
-            case "!desbloquear":
-                let usuariosDesbloqueados = []
-                if(quotedMsg){
-                    usuariosDesbloqueados.push(quotedMsgObj.author)
-                } else if(mentionedJidList.length > 1) {
-                    usuariosDesbloqueados = mentionedJidList
-                } else {
-                    var numeroInserido = body.slice(13).trim()
-                    if(numeroInserido.length == 0) return await client.reply(chatId, erroComandoMsg(command), id)
-                    usuariosDesbloqueados.push(numeroInserido.replace(/\W+/g,"")+"@c.us")
-                }
-                for (var usuario of usuariosDesbloqueados){
-                    if(!blockNumber.includes(usuario)) {
-                        await client.sendTextWithMentions(chatId, criarTexto(msgs_texto.admin.desbloquear.ja_desbloqueado, usuario.replace(/@c.us/g,'')))
-                    } else {
-                        client.contactUnblock(usuario)
-                        await client.sendTextWithMentions(chatId, criarTexto(msgs_texto.admin.desbloquear.sucesso, usuario.replace(/@c.us/g,'')))
-                    }
-                }
                 break
 
             case "!autostickerpv":
@@ -198,91 +94,6 @@ module.exports = admin = async(client,message) => {
                 } 
                 break
 
-            case "!fotobot":
-                if(isMedia || quotedMsg){
-                    var dadosMensagem = {
-                        tipo : (isMedia) ? type : quotedMsg.type,
-                        mimetype : (isMedia)? mimetype : quotedMsg.mimetype,
-                        mensagem: (isMedia) ? message : quotedMsg
-                    }
-                    if(dadosMensagem.tipo === "image"){
-                        var mediaData = await decryptMedia(dadosMensagem.mensagem)
-                        var imagemBase64 = `data:${dadosMensagem.mimetype};base64,${mediaData.toString('base64')}`
-                        var res = await client.setProfilePic(imagemBase64)
-                        if(res) await client.reply(chatId, msgs_texto.admin.fotobot.sucesso, id)
-                        else await client.reply(chatId, msgs_texto.admin.fotobot.erro, id)
-                    } else {
-                        return client.reply(chatId, erroComandoMsg(command) , id)
-                    }
-                } else {
-                    return client.reply(chatId, erroComandoMsg(command) , id)
-                }
-                break
-
-            case "!antitravapv":
-                var novoEstado = !botInfo().antitrava.status
-                if(novoEstado){
-                    var maxCaracteres = args[1] || 1500
-                    if(isNaN(maxCaracteres) || maxCaracteres < 250) return await client.reply(chatId, msgs_texto.admin.antitrava.qtd_invalida, id)
-                    botAlterarAntitrava(true, maxCaracteres)
-                    await client.reply(chatId, criarTexto(msgs_texto.admin.antitrava.ligado, maxCaracteres), id)
-                } else {
-                    botAlterarAntitrava(false, 0)
-                    await client.reply(chatId, msgs_texto.admin.antitrava.desligado, id)
-                } 
-                break
-
-            case "!limitediario":
-                var novoEstado = !botInfo().limite_diario.status
-                if(novoEstado){
-                    botAlterarLimiteDiario(true)
-                    await client.reply(chatId, msgs_texto.admin.limitediario.ativado,id)
-                } else {
-                    botAlterarLimiteDiario(false)
-                    await client.reply(chatId, msgs_texto.admin.limitediario.desativado,id)
-                } 
-                break
-
-            case "!taxalimite":
-                var novoEstado = !botInfo().limitecomandos.status
-                if(novoEstado){
-                    if(args.length !== 3) return await client.reply(chatId, erroComandoMsg(command), id)
-                    var qtd_max_minuto = args[1], tempo_bloqueio = args[2]
-                    if(isNaN(qtd_max_minuto) || qtd_max_minuto < 3) return await client.reply(chatId,msgs_texto.admin.limitecomandos.qtd_invalida,id)
-                    if(isNaN(tempo_bloqueio) || tempo_bloqueio < 10) return await client.reply(chatId,msgs_texto.admin.limitecomandos.tempo_invalido,id)
-                    botAlterarLimitador(true, parseInt(qtd_max_minuto), parseInt(tempo_bloqueio))
-                    await client.reply(chatId, msgs_texto.admin.limitecomandos.ativado,id)
-                } else {
-                    botAlterarLimitador(false)
-                    await client.reply(chatId, msgs_texto.admin.limitecomandos.desativado,id)
-                }
-                break
-            
-            case "!limitarmsgs":
-                var novoEstado = !botInfo().limitarmensagens.status
-                if(novoEstado){
-                    if(args.length !== 3) return await client.reply(chatId, erroComandoMsg(command), id)
-                    let max_msg = args[1], msgs_intervalo = args[2]
-                    if(isNaN(max_msg) || max_msg < 3) return await client.reply(chatId,msgs_texto.admin.limitarmsgs.qtd_invalida,id)
-                    if(isNaN(msgs_intervalo) || msgs_intervalo < 10) return await client.reply(chatId,msgs_texto.admin.limitarmsgs.tempo_invalido,id)
-                    botAlterarLimitarMensagensPv(true,parseInt(max_msg),parseInt(msgs_intervalo))
-                    await client.reply(chatId, msgs_texto.admin.limitarmsgs.ativado,id)
-                } else {
-                    botAlterarLimitarMensagensPv(false)
-                    await client.reply(chatId, msgs_texto.admin.limitarmsgs.desativado,id)
-                }
-                break
-            
-            case "!mudarlimite":
-                if(!botInfo().limite_diario.status) return await client.reply(chatId, msgs_texto.admin.mudarlimite.erro_limite_diario,id)
-                if(args.length === 1) return await client.reply(chatId, erroComandoMsg(command),id)
-                var tipo = args[1].toLowerCase(), qtd = args[2]
-                if(qtd != -1) if(isNaN(qtd) || qtd < 5) return await client.reply(chatId, msgs_texto.admin.mudarlimite.invalido,id)
-                var alterou = await botQtdLimiteDiario(tipo, parseInt(qtd))
-                if(!alterou) return await client.reply(chatId, msgs_texto.admin.mudarlimite.tipo_invalido,id)
-                await client.reply(chatId, criarTexto(msgs_texto.admin.mudarlimite.sucesso, tipo.toUpperCase(), qtd == -1 ? "∞" : qtd), id)
-                break
-            
             case "!usuarios":
                 if(args.length === 1) return await client.reply(chatId, erroComandoMsg(command), id)
                 var tipo = args[1].toLowerCase()
