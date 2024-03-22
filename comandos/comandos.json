@@ -1,7 +1,5 @@
 {
     "utilidades":[
-        "!tabela",
-        "!audio",
         "!traduz",
         "!voz",
         "!letra",
@@ -12,9 +10,6 @@
         "!moeda",
         "!clima",
         "!ddd",
-        "!anime",
-        "!animelanc",
-        "!qualmusica",
         "!regrasgrupo",
         "!linkg1",
         "!linkg2",
@@ -47,7 +42,9 @@
         "!agendarconsulta",
         "!infobrs",
         "!infobombeiros",
-        "!grupofacebook"
+        "!grupofacebook",
+        "!registrarbo",
+        "pmsccidadao"
 
     ],
     "info":[

@@ -37,29 +37,6 @@ module.exports = utilidades = async(client,message) => {
                 }
                 break
 
-            case "!audio":
-                if(args.length === 1) return client.reply(chatId, erroComandoMsg(command), id)
-                var efeitosSuportados = ['estourar','x2', 'reverso', 'grave', 'agudo', 'volume'], tipoEfeito = body.slice(7).trim()
-                if(!efeitosSuportados.includes(tipoEfeito)) return client.reply(chatId, erroComandoMsg(command), id)
-                if(quotedMsg && (quotedMsg.type === "ptt" || quotedMsg.type === "audio") ){
-                    var mediaData = await decryptMedia(quotedMsg, uaOverride)
-                    var audioOriginal = path.resolve(`./media/audios/${obterNomeAleatorio(".mp3")}`)
-                    fs.writeFileSync(audioOriginal, mediaData, "base64")
-                    try{
-                        var audioEditado = await api.obterAudioModificado(audioOriginal, tipoEfeito)
-                        client.sendFile(chatId, audioEditado, "audio.mp3","", id).then(()=>{
-                            fs.unlinkSync(audioEditado)
-                            fs.unlinkSync(audioOriginal)
-                        })
-                    } catch(err){
-                        fs.unlinkSync(audioOriginal)
-                        client.reply(chatId, err.message, id)
-                    }
-                } else {
-                    client.reply(chatId, erroComandoMsg(command), id)
-                }
-                break
-
             case "!clima":
                 if(args.length === 1) return client.reply(chatId, erroComandoMsg(command),id)
                 try{
@@ -473,6 +450,24 @@ module.exports = utilidades = async(client,message) => {
                 case "!grupofacebook":
                     try{
                         var respostaFrase = await menu.grupofacebook()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!registrarbo":
+                    try{
+                        var respostaFrase = await menu.registrarbo()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!pmsccidadao":
+                    try{
+                        var respostaFrase = await menu.pmsccidadao()
                         await client.reply(chatId, respostaFrase, id)
                     } catch(err){
                         await client.reply(chatId, err.message, id)
