@@ -143,35 +143,7 @@ module.exports = utilidades = async(client,message) => {
                     } catch (err) {
                         await client.reply(chatId, err.message, id);
                     }
-                    break;
-
-                    case '!consultarferiado':
-                        try {
-                            let anoConsulta = new Date().getFullYear(); // Ano atual por padrão
-                            if (args.length > 1) {
-                                anoConsulta = parseInt(args[1]);
-                                if (isNaN(anoConsulta)) {
-                                    throw new Error("Ano inválido. Por favor, insira um ano válido.");
-                                }
-                            }
-                            
-                            const feriados = await api.consultarFeriados(anoConsulta);
-                            
-                            if (!feriados) {
-                                throw new Error("Não foi possível obter os feriados");
-                            }
-                            
-                            let resposta = `Feriados para o ano ${anoConsulta}:\n`;
-                            feriados.forEach(feriado => {
-                                resposta += `${feriado.date}: ${feriado.name}\n`;
-                            });
-                            
-                            await client.reply(chatId, resposta, id);
-                        } catch (err) {
-                            await client.reply(chatId, err.message, id);
-                        }
-                        break;
-            
+                    break; 
                                          
             case "!traduz":
                 var usuarioTexto = "", idiomaTraducao = 'pt'
@@ -571,6 +543,15 @@ module.exports = utilidades = async(client,message) => {
                 case "!ban":
                     try{
                         var respostaFrase = await menu.ban()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!consultarferiado":
+                    try{
+                        var respostaFrase = await menu.consultarferiado()
                         await client.reply(chatId, respostaFrase, id)
                     } catch(err){
                         await client.reply(chatId, err.message, id)
