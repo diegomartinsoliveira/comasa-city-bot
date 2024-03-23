@@ -44,7 +44,10 @@
         "!infobombeiros",
         "!grupofacebook",
         "!registrarbo",
-        "pmsccidadao"
+        "!pmsccidadao",
+        "!ban",
+        "!consultarcep",
+        "!consultarcnpj"
 
     ],
     "info":[
@@ -63,7 +66,6 @@
         "!simg"
     ],
     "grupo":[
-        "!fotogrupo",
         "!regras",
         "!blista",
         "!dlista",
@@ -99,6 +101,7 @@
         "!detector",
         "!massacote",
         "!roletarussa",
+        "!mamar",
         "!benga",
         "!viado",
         "!sortear",

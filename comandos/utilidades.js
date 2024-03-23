@@ -91,6 +91,59 @@ module.exports = utilidades = async(client,message) => {
                     await client.reply(chatId, err.message ,id)
                 }
                 break
+
+                case '!consultarcep':
+                    if (args.length === 1) return client.reply(chatId, erroComandoMsg(command), id);
+                    try {
+                        var consulta = args[1];
+                        var resposta;
+                        
+                        // Consulta o CEP
+                        var cepDados = await api.consultarCEP(consulta);
+                        resposta = `CEP: ${cepDados.cep}\n`;
+                        resposta += `Logradouro: ${cepDados.logradouro}\n`;
+                        resposta += `Bairro: ${cepDados.bairro}\n`;
+                        resposta += `Cidade: ${cepDados.localidade}\n`;
+                        resposta += `Estado: ${cepDados.uf}\n`;
+                        
+                        await client.reply(chatId, resposta, id);
+                    } catch (err) {
+                        await client.reply(chatId, err.message, id);
+                    }
+                    break;               
+
+                case '!consultarcnpj':
+                    if (args.length === 1) return client.reply(chatId, erroComandoMsg(command), id);
+                    try {
+                        var consulta = args[1];
+                        var resposta = '';
+                        
+                        // Verifica se a consulta é um CNPJ válido
+                        if (!/^\d{14}$/.test(consulta)) {
+                            throw new Error("CNPJ inválido, digite apenas os números.");
+                        }
+                        
+                        // Consulta o CNPJ
+                        var cnpjDados = await api.consultarCNPJ(consulta);
+                        
+                        // Adiciona apenas as informações disponíveis na resposta
+                        for (const [chave, valor] of Object.entries(cnpjDados)) {
+                            // Verifica se o valor é uma string antes de adicioná-lo à resposta
+                            if (typeof valor === 'string' && valor.trim() !== '') {
+                                resposta += `${chave.charAt(0).toUpperCase() + chave.slice(1)}: ${valor}\n`;
+                            }
+                        }
+                        
+                        // Verifica se a resposta está vazia
+                        if (resposta === '') {
+                            throw new Error("Não há informações disponíveis para este CNPJ");
+                        }
+                        
+                        await client.reply(chatId, resposta, id);
+                    } catch (err) {
+                        await client.reply(chatId, err.message, id);
+                    }
+                    break;                   
             
             case "!traduz":
                 var usuarioTexto = "", idiomaTraducao = 'pt'
@@ -137,6 +190,19 @@ module.exports = utilidades = async(client,message) => {
             case '!noticias':
                 try{
                     var listaNoticias = await api.obterNoticias()
+                    var respostaNoticias = msgs_texto.utilidades.noticia.resposta_titulo
+                    for(let noticia of listaNoticias){
+                        respostaNoticias += criarTexto(msgs_texto.utilidades.noticia.resposta_itens, noticia.titulo, noticia.descricao || "Sem descrição", noticia.url)
+                    }
+                    await client.reply(chatId, respostaNoticias, id)
+                } catch(err){
+                    await client.reply(chatId, err.message, id)
+                }
+                break;
+
+                case '!fipe':
+                try{
+                    var listaNoticias = await api.obterFipe()
                     var respostaNoticias = msgs_texto.utilidades.noticia.resposta_titulo
                     for(let noticia of listaNoticias){
                         respostaNoticias += criarTexto(msgs_texto.utilidades.noticia.resposta_itens, noticia.titulo, noticia.descricao || "Sem descrição", noticia.url)
@@ -468,6 +534,15 @@ module.exports = utilidades = async(client,message) => {
                 case "!pmsccidadao":
                     try{
                         var respostaFrase = await menu.pmsccidadao()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
+
+                case "!ban":
+                    try{
+                        var respostaFrase = await menu.ban()
                         await client.reply(chatId, respostaFrase, id)
                     } catch(err){
                         await client.reply(chatId, err.message, id)

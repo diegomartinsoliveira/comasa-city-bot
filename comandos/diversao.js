@@ -126,6 +126,19 @@ module.exports = diversao = async(client,message) => {
                 // await client.removeParticipant(groupId, idParticipantesAtuais[indexAleatorio])
                 break
 
+            case '!mamar':
+                if (!isGroupMsg) return await client.reply(chatId, msgs_texto.permissao.grupo, id)
+                if (!isBotGroupAdmins) return await client.reply(chatId,msgs_texto.permissao.bot_admin, id)
+                var idParticipantesAtuais = await client.getGroupMembersId(groupId)
+                idParticipantesAtuais.splice(idParticipantesAtuais.indexOf(groupOwner),1)
+                idParticipantesAtuais.splice(idParticipantesAtuais.indexOf(botNumber+'@c.us'),1)
+                if(idParticipantesAtuais.length == 0) return await client.reply(chatId, msgs_texto.diversao.roletarussa.sem_membros, id)
+                var indexAleatorio = Math.floor(Math.random() * idParticipantesAtuais.length)
+                var respostaTexto = criarTexto(msgs_texto.diversao.mamar.resposta, idParticipantesAtuais[indexAleatorio].replace(/@c.us/g, ''))
+                await client.reply(chatId, msgs_texto.diversao.mamar.espera , id)
+                await client.sendTextWithMentions(chatId, respostaTexto)
+                break
+
             case '!benga':
                 if (!isGroupMsg) return await client.reply(chatId, msgs_texto.permissao.grupo, id)
                 if (!isBotGroupAdmins) return await client.reply(chatId,msgs_texto.permissao.bot_admin, id)

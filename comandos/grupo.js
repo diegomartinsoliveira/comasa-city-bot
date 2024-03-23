@@ -5,7 +5,6 @@ const msgs_texto = require('../lib/msgs')
 const {criarTexto, erroComandoMsg, removerNegritoComando} = require('../lib/util')
 const {bloquearComandosGrupo, desbloquearComandosGrupo} = require('../lib/bloqueioComandos')
 const db = require('../lib/database')
-const {obterDestravas} = require("../lib/api")
 
 module.exports = grupo = async(client,message) => {
     try{
@@ -251,25 +250,6 @@ module.exports = grupo = async(client,message) => {
                 }
                 enqueteResposta += msgs_texto.grupo.verenquete.resposta_inferior
                 await client.reply(chatId, enqueteResposta, id)
-                break
-
-            case "!vb":
-                if (!isBotGroupAdmins) return client.reply(chatId,msgs_texto.permissao.bot_admin, id)
-                if (!isGroupAdmins) return client.reply(chatId, msgs_texto.permissao.apenas_admin , id)
-                var grupoInfo = await db.obterGrupo(groupId)
-                var estadoNovo = !grupoInfo.voteban.status, maxVotos = args[2]
-                if(estadoNovo){
-                    if(args.length != 3) return client.reply(chatId, erroComandoMsg(command), id)
-                    if(mentionedJidList.length != 1) return client.reply(chatId, msgs_texto.grupo.voteban.erro_mencao ,id)
-                    if(mentionedJidList[0] == botNumber+"@c.us" || mentionedJidList[0] == chat.groupMetadata.owner) return client.reply(chatId, msgs_texto.grupo.voteban.erro_dono ,id)
-                    if(isNaN(maxVotos)) return client.reply(chatId, msgs_texto.grupo.voteban.erro_num_votos ,id)
-                    if(maxVotos < 3 || maxVotos > 30) return client.reply(chatId, msgs_texto.grupo.voteban.limit_num_votos ,id)
-                    await db.alterarVoteban(groupId, true, maxVotos, mentionedJidList[0])
-                    client.sendTextWithMentions(chatId, criarTexto(msgs_texto.grupo.voteban.votacao_aberta_resposta, mentionedJidList[0], maxVotos))
-                } else {
-                    client.sendTextWithMentions(chatId, criarTexto(msgs_texto.grupo.voteban.votacao_encerrada_resposta, grupoInfo.voteban.usuario))
-                    await db.alterarVoteban(groupId,false)
-                }
                 break
 
             case "!bcmd":
