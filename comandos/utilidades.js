@@ -557,6 +557,15 @@ module.exports = utilidades = async(client,message) => {
                         await client.reply(chatId, err.message, id)
                     }
                 break
+
+                case "!gruponoticia":
+                    try{
+                        var respostaFrase = await menu.gruponoticia()
+                        await client.reply(chatId, respostaFrase, id)
+                    } catch(err){
+                        await client.reply(chatId, err.message, id)
+                    }
+                break
         }
     } catch(err){
         throw err

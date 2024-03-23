@@ -48,7 +48,8 @@
         "!ban",
         "!consultarcep",
         "!consultarcnpj",
-        "!consultarferiado"
+        "!consultarferiado",
+        "!gruponoticias"
 
     ],
     "info":[
