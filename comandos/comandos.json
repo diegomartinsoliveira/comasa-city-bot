@@ -47,7 +47,8 @@
         "!pmsccidadao",
         "!ban",
         "!consultarcep",
-        "!consultarcnpj"
+        "!consultarcnpj",
+        "!consultarferiado"
 
     ],
     "info":[
